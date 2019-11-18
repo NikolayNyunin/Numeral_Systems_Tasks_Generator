@@ -1,3 +1,8 @@
+import sys
+
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
+
+
 HEXADECIMAL_NUMBERS = '0123456789ABCDEF'
 
 
@@ -14,6 +19,28 @@ def from_decimal(num, base):  # функция для перевода числ�
 
     res = list(map(lambda d: HEXADECIMAL_NUMBERS[d], res))[::-1]
     return ''.join(res)
+
+
+class InterfaceWidget(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.start_button = None
+        self.task_type, self.range, self.filename = None, [None, None], None
+        self.init_ui()
+        self.show()
+
+    def init_ui(self):
+        self.setFixedSize(800, 600)
+        self.setWindowTitle('Примеры по информатике')
+
+        self.start_button = QPushButton('Создать файл с примерами')
+        self.start_button.clicked.connect(self.start)
+
+    def start(self):
+        generator = NumeralSystems(self.task_type, self.range[0],
+                                   self.range[1], self.filename)
+        generator.start()
 
 
 class NumeralSystems:
@@ -34,9 +61,10 @@ class NumeralSystems:
         pass  # обработка self.file (os?)
 
 
-def main():
-    pass
-
-
 if __name__ == '__main__':
-    main()
+    try:
+        app = QApplication(sys.argv)
+        gui = InterfaceWidget()
+        sys.exit(app.exec())
+    except Exception as e:
+        print('Ошибка:', e)
