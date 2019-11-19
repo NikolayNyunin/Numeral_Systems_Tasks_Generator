@@ -1,5 +1,6 @@
 import sys
 import os
+from random import randint
 
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel,\
     QComboBox, QLineEdit, QPushButton, QTextEdit
@@ -136,6 +137,13 @@ class NumeralSystems:
         self.file = file
 
     def variables(self):
+        self.file_writer()
+
+    def file_writer(self):
+        with open(self.file+'.txt', 'a', encoding='utf-8') as f:
+            f.write('\n:: Вопрос \n:: \\( %d_\{%d\} = ?_\{%d\} \\) \n' % (1, 2, 3))
+
+    def task_generator(self):
         pass
 
 
