@@ -1,7 +1,8 @@
 import sys
+import os
 
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel,\
-    QComboBox, QTextEdit, QPushButton, QPlainTextEdit
+    QComboBox, QLineEdit, QPushButton, QTextEdit
 from PyQt5.Qt import QFont
 
 
@@ -40,7 +41,7 @@ class InterfaceWidget(QWidget):
             self.range_start_input, self.range_end_label, self.range_end_input,\
             self.filename_label, self.filename_input, self.start_button,\
             self.output_console = [None] * 10
-        self.task_type, self.range, self.filename = None, [None, None], None
+        self.task_type, self.range, self.filename = None, [0, 0], None
         self.init_ui()
         self.show()
 
@@ -66,7 +67,7 @@ class InterfaceWidget(QWidget):
         self.range_start_label.setFont(QFont('Arial', 14))
         grid.addWidget(self.range_start_label, 1, 0)
 
-        self.range_start_input = QTextEdit('', self)
+        self.range_start_input = QLineEdit('', self)
         self.range_start_input.setFont(QFont('Arial', 14))
         self.range_start_input.setMaximumHeight(35)
         grid.addWidget(self.range_start_input, 1, 1)
@@ -75,7 +76,7 @@ class InterfaceWidget(QWidget):
         self.range_end_label.setFont(QFont('Arial', 14))
         grid.addWidget(self.range_end_label, 2, 0)
 
-        self.range_end_input = QTextEdit('', self)
+        self.range_end_input = QLineEdit('', self)
         self.range_end_input.setFont(QFont('Arial', 14))
         self.range_end_input.setMaximumHeight(35)
         grid.addWidget(self.range_end_input, 2, 1)
@@ -84,7 +85,7 @@ class InterfaceWidget(QWidget):
         self.filename_label.setFont(QFont('Arial', 14))
         grid.addWidget(self.filename_label, 3, 0)
 
-        self.filename_input = QTextEdit('', self)
+        self.filename_input = QLineEdit('', self)
         self.filename_input.setFont(QFont('Arial', 14))
         self.filename_input.setMaximumHeight(35)
         grid.addWidget(self.filename_input, 3, 1)
@@ -95,13 +96,33 @@ class InterfaceWidget(QWidget):
         self.start_button.clicked.connect(self.start)
         grid.addWidget(self.start_button, 4, 0, 1, 2)
 
-        self.output_console = QPlainTextEdit('', self)
-        self.output_console.setFont(QFont('Arial', 14))
+        self.output_console = QTextEdit('', self)
+        self.output_console.setFont(QFont('Arial', 12))
         self.output_console.setReadOnly(True)
         self.output_console.setMaximumHeight(200)
         grid.addWidget(self.output_console, 5, 0, 1, 2)
 
     def start(self):
+        self.task_type = self.task_type_selector.currentIndex() + 1
+
+        try:
+            self.range[0] = int(self.range_start_input.text())
+            self.range[1] = int(self.range_end_input.text())
+        except Exception as ex:
+            self.output_console.append('Ошибка: неверный формат входных данных ({}).'.format(ex))
+            return
+        if self.range[0] >= self.range[1]:
+            self.output_console.append('Ошибка: минимальное число диапазона больше или равно максимальному.')
+            return
+
+        self.filename = self.filename_input.text()
+        if self.filename == '':
+            self.output_console.append('Ошибка: имя файла не задано.')
+            return
+        if os.path.exists(self.filename):
+            self.output_console.append('Ошибка: файл с таким именем уже существует.')
+            return
+
         generator = NumeralSystems(self.task_type, self.range, self.filename)
         generator.variables()
 
