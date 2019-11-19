@@ -119,16 +119,12 @@ class NumeralSystems:
         self.file_writer()
 
     def file_writer(self):
-        with open(self.file+'.txt', 'a') as f:
-            f.write(':: Вопрос \n:: \\( %d_\{%d\} = ?_\{%d\} \\) \n' % (1, 2, 3))
+        with open(self.file+'.txt', 'a', encoding='utf-8') as f:
+            f.write('\n:: Вопрос \n:: \\( %d_\{%d\} = ?_\{%d\} \\) \n' % (1, 2, 3))
 
     def task_generator(self):
         pass
 
-
-
-s = NumeralSystems(1, (1, 2), 'ялучшийвмиреДЭН')
-s.file_writer()
 
 if __name__ == '__main__':
     try:
