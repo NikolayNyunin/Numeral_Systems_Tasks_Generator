@@ -1,12 +1,12 @@
 import sys
 import os
-from random import randint
+from random import randint, choice
 
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel,\
     QComboBox, QLineEdit, QPushButton, QTextEdit
 from PyQt5.Qt import QFont
 
-
+k
 HEXADECIMAL_NUMBERS = '0123456789ABCDEF'
 TASK_TYPES = ('1.) ?n -> ?10', '2.) ?10 -> ?n', '3.) ?n -> ?k',
               '4.) ?2 -> ?n (по табл.)', '5.) ?n -> ?2 (по табл.)',
@@ -144,7 +144,10 @@ class NumeralSystems:
             f.write('\n:: Вопрос \n:: \\( %d_\{%d\} = ?_\{%d\} \\) \n' % (1, 2, 3))
 
     def task_generator(self):
-        pass
+        if self.task == 1:
+            to_decimal(randint(self.start, self.end), choice(randint(2, 9), randint(11, 16)))
+        elif self.task == 2:
+            from_decimal(randint(self.start, self.end), choice(randint(2, 9), randint(11, 16)))
 
 
 if __name__ == '__main__':
