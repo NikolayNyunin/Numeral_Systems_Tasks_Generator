@@ -45,10 +45,10 @@ class InterfaceWidget(QWidget):
 
 class NumeralSystems:
 
-    def __init__(self, task, start, end, file):
+    def __init__(self, task, ranges, file):
         self.task = task
-        self.start = start
-        self.end = end
+        self.start = ranges[0]
+        self.end = ranges[1]
         self.file = file
 
     def variables(self):
