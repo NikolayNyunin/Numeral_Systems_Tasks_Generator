@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget, QComboBox, QTextEdit, QPushButton
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QTextEdit, QPushButton
 from PyQt5.Qt import QFont
 
 
@@ -35,7 +35,9 @@ class InterfaceWidget(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.task_type_selector, self.filename_input, self.start_button = [None] * 3
+        self.task_type_label, self.task_type_selector, self.range_start_label,\
+            self.range_start_input, self.range_end_label, self.range_end_input,\
+            self.filename_label, self.filename_input, self.start_button = [None] * 9
         self.task_type, self.range, self.filename = None, [None, None], None
         self.init_ui()
         self.show()
@@ -44,11 +46,41 @@ class InterfaceWidget(QWidget):
         self.setFixedSize(800, 600)
         self.setWindowTitle('Примеры по информатике')
 
+        self.task_type_label = QLabel('Выберите тип задания:', self)
+        self.task_type_label.setFont(QFont('Arial', 14))
+        self.task_type_label.resize(250, 35)
+        self.task_type_label.move(100, 0)
+
         self.task_type_selector = QComboBox(self)
         self.task_type_selector.addItems(TASK_TYPES)
         self.task_type_selector.setFont(QFont('Arial', 14))
         self.task_type_selector.resize(250, 35)
         self.task_type_selector.move(100, 50)
+
+        self.range_start_label = QLabel('Введите минимальное значение числа:', self)
+        self.range_start_label.setFont(QFont('Arial', 14))
+        self.range_start_label.resize(400, 35)
+        self.range_start_label.move(400, 50)
+
+        self.range_start_input = QTextEdit('', self)
+        self.range_start_input.setFont(QFont('Arial', 14))
+        self.range_start_input.resize(100, 35)
+        self.range_start_input.move(500, 100)
+
+        self.range_end_label = QLabel('Введите максимальное значение числа:', self)
+        self.range_end_label.setFont(QFont('Arial', 14))
+        self.range_end_label.resize(400, 35)
+        self.range_end_label.move(400, 200)
+
+        self.range_end_input = QTextEdit('', self)
+        self.range_end_input.setFont(QFont('Arial', 14))
+        self.range_end_input.resize(100, 35)
+        self.range_end_input.move(500, 250)
+
+        self.filename_label = QLabel('Введите желаемое название файла:', self)
+        self.filename_label.setFont(QFont('Arial', 14))
+        self.filename_label.resize(350, 35)
+        self.filename_label.move(100, 100)
 
         self.filename_input = QTextEdit('', self)
         self.filename_input.setFont(QFont('Arial', 14))
