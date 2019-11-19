@@ -1,6 +1,7 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QTextEdit, QPushButton
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel,\
+    QComboBox, QTextEdit, QPushButton, QPlainTextEdit
 from PyQt5.Qt import QFont
 
 
@@ -37,7 +38,8 @@ class InterfaceWidget(QWidget):
         super().__init__()
         self.task_type_label, self.task_type_selector, self.range_start_label,\
             self.range_start_input, self.range_end_label, self.range_end_input,\
-            self.filename_label, self.filename_input, self.start_button = [None] * 9
+            self.filename_label, self.filename_input, self.start_button,\
+            self.output_console = [None] * 10
         self.task_type, self.range, self.filename = None, [None, None], None
         self.init_ui()
         self.show()
@@ -46,52 +48,58 @@ class InterfaceWidget(QWidget):
         self.setFixedSize(800, 600)
         self.setWindowTitle('Примеры по информатике')
 
-        self.task_type_label = QLabel('Выберите тип задания:', self)
+        grid = QGridLayout()
+        grid.setHorizontalSpacing(50)
+        grid.setContentsMargins(50, 10, 50, 10)
+        self.setLayout(grid)
+
+        self.task_type_label = QLabel('Тип задания:', self)
         self.task_type_label.setFont(QFont('Arial', 14))
-        self.task_type_label.resize(250, 35)
-        self.task_type_label.move(100, 0)
+        grid.addWidget(self.task_type_label, 0, 0)
 
         self.task_type_selector = QComboBox(self)
         self.task_type_selector.addItems(TASK_TYPES)
         self.task_type_selector.setFont(QFont('Arial', 14))
-        self.task_type_selector.resize(250, 35)
-        self.task_type_selector.move(100, 50)
+        grid.addWidget(self.task_type_selector, 0, 1)
 
-        self.range_start_label = QLabel('Введите минимальное значение числа:', self)
+        self.range_start_label = QLabel('Минимальное число:', self)
         self.range_start_label.setFont(QFont('Arial', 14))
-        self.range_start_label.resize(400, 35)
-        self.range_start_label.move(400, 50)
+        grid.addWidget(self.range_start_label, 1, 0)
 
         self.range_start_input = QTextEdit('', self)
         self.range_start_input.setFont(QFont('Arial', 14))
-        self.range_start_input.resize(100, 35)
-        self.range_start_input.move(500, 100)
+        self.range_start_input.setMaximumHeight(35)
+        grid.addWidget(self.range_start_input, 1, 1)
 
-        self.range_end_label = QLabel('Введите максимальное значение числа:', self)
+        self.range_end_label = QLabel('Максимальное число:', self)
         self.range_end_label.setFont(QFont('Arial', 14))
-        self.range_end_label.resize(400, 35)
-        self.range_end_label.move(400, 200)
+        grid.addWidget(self.range_end_label, 2, 0)
 
         self.range_end_input = QTextEdit('', self)
         self.range_end_input.setFont(QFont('Arial', 14))
-        self.range_end_input.resize(100, 35)
-        self.range_end_input.move(500, 250)
+        self.range_end_input.setMaximumHeight(35)
+        grid.addWidget(self.range_end_input, 2, 1)
 
-        self.filename_label = QLabel('Введите желаемое название файла:', self)
+        self.filename_label = QLabel('Название файла:', self)
         self.filename_label.setFont(QFont('Arial', 14))
-        self.filename_label.resize(350, 35)
-        self.filename_label.move(100, 100)
+        grid.addWidget(self.filename_label, 3, 0)
 
         self.filename_input = QTextEdit('', self)
         self.filename_input.setFont(QFont('Arial', 14))
-        self.filename_input.resize(300, 35)
-        self.filename_input.move(100, 150)
+        self.filename_input.setMaximumHeight(35)
+        grid.addWidget(self.filename_input, 3, 1)
 
         self.start_button = QPushButton('Создать файл с примерами', self)
         self.start_button.setFont(QFont('Arial', 14))
-        self.start_button.resize(300, 35)
-        self.start_button.move(100, 250)
+        self.start_button.setMinimumHeight(40)
         self.start_button.clicked.connect(self.start)
+        grid.addWidget(self.start_button, 4, 0, 1, 2)
+
+        self.output_console = QPlainTextEdit('', self)
+        self.output_console.setFont(QFont('Arial', 14))
+        self.output_console.setReadOnly(True)
+        self.output_console.setMaximumHeight(200)
+        grid.addWidget(self.output_console, 5, 0, 1, 2)
 
     def start(self):
         generator = NumeralSystems(self.task_type, self.range, self.filename)
