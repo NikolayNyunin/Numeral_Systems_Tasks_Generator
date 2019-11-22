@@ -6,12 +6,13 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel,\
     QComboBox, QLineEdit, QPushButton, QTextEdit
 from PyQt5.Qt import QFont
 
-k
+
 HEXADECIMAL_NUMBERS = '0123456789ABCDEF'
 TASK_TYPES = ('1.) ?n -> ?10', '2.) ?10 -> ?n', '3.) ?n -> ?k',
               '4.) ?2 -> ?n (по табл.)', '5.) ?n -> ?2 (по табл.)',
               '6.) ?n -> ?k (по табл.)', '7.) ?n + ?n', '8.) ?n - ?n',
               '9.) ?n * ?n')
+BASES = (2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16)
 
 
 def to_decimal(num, base):  # функция для перевода числа в десятичную СС
@@ -137,17 +138,25 @@ class NumeralSystems:
         self.file = file
 
     def variables(self):
-        self.file_writer()
+        if self.task == 1:
+            self.task_1()
+        # self.file_writer()
 
-    def file_writer(self):
+    def file_writer(self, num, base1, base2, answer):
         with open(self.file+'.txt', 'a', encoding='utf-8') as f:
-            f.write('\n:: Вопрос \n:: \\( %d_\{%d\} = ?_\{%d\} \\) \n' % (1, 2, 3))
+            f.write(':: Вопрос \n:: \\( %s_\{%s\} = ?_\{%s\} \\) {=%s}\n\n' % (num, base1, base2, answer))
 
     def task_generator(self):
         if self.task == 1:
             to_decimal(randint(self.start, self.end), choice(randint(2, 9), randint(11, 16)))
         elif self.task == 2:
             from_decimal(randint(self.start, self.end), choice(randint(2, 9), randint(11, 16)))
+
+    def task_1(self):
+        for num in range(self.start, self.end + 1):
+            base = choice(BASES)
+            num_n = from_decimal(num, base)
+            self.file_writer(num_n, base, 10, num)
 
 
 if __name__ == '__main__':
