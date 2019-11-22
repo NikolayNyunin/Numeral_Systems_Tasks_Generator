@@ -151,6 +151,12 @@ class NumeralSystems:
             self.task_5()
         elif self.task == 6:
             self.task_6()
+        elif self.task == 7:
+            self.task_7()
+        elif self.task == 8:
+            self.task_8()
+        elif self.task == 9:
+            self.task_9()
         return True
         # self.file_writer()
 

@@ -33,6 +33,9 @@ def type_3(num, from_base, to_base):
     return ''.join(list(map(lambda d: HEXADECIMAL_NUMBERS[d], res))[::-1])
 
 
+print(type_3(14, 7, 2))
+
+
 def type_4(num, to_base):
     # first convert to decimal number
     num = [HEXADECIMAL_NUMBERS.index(digit) for digit in str(num)]
