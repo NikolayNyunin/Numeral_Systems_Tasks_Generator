@@ -13,6 +13,7 @@ TASK_TYPES = ('1.) ?n -> ?10', '2.) ?10 -> ?n', '3.) ?n -> ?k',
               '6.) ?n -> ?k (по табл.)', '7.) ?n + ?n', '8.) ?n - ?n',
               '9.) ?n * ?n')
 BASES = (2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16)
+TABLE_BASES = (4, 8, 16)
 
 
 def to_decimal(num, base):  # функция для перевода числа в десятичную СС
@@ -140,23 +141,78 @@ class NumeralSystems:
     def variables(self):
         if self.task == 1:
             self.task_1()
+        elif self.task == 2:
+            self.task_2()
+        elif self.task == 3:
+            self.task_3()
+        elif self.task == 4:
+            self.task_4()
+        elif self.task == 5:
+            self.task_5()
+        elif self.task == 6:
+            self.task_6()
+        return True
         # self.file_writer()
 
     def file_writer(self, num, base1, base2, answer):
         with open(self.file+'.txt', 'a', encoding='utf-8') as f:
-            f.write(':: Вопрос \n:: \\( %s_\{%s\} = ?_\{%s\} \\) {=%s}\n\n' % (num, base1, base2, answer))
-
-    def task_generator(self):
-        if self.task == 1:
-            to_decimal(randint(self.start, self.end), choice(randint(2, 9), randint(11, 16)))
-        elif self.task == 2:
-            from_decimal(randint(self.start, self.end), choice(randint(2, 9), randint(11, 16)))
+            f.write(':: Вопрос \n:: \\( %s_\{%s\} = ?_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число (без указания основания).'
+                    '\n\n' % (num, base1, base2, answer))
 
     def task_1(self):
         for num in range(self.start, self.end + 1):
             base = choice(BASES)
             num_n = from_decimal(num, base)
             self.file_writer(num_n, base, 10, num)
+
+    def task_2(self):
+        for num in range(self.start, self.end + 1):
+            base = choice(BASES)
+            num_n = to_decimal(num, base)
+            self.file_writer(num_n, 10, base, num)
+
+    def task_3(self):
+        for num in range(self.start, self.end + 1):
+            from_base = choice(BASES)
+            to_base = choice(BASES)
+            if from_base == to_base:
+                continue
+            num_k = from_decimal(num, to_base)
+            num_n = from_decimal(num, from_base)
+            self.file_writer(num_n, from_base, to_base, num_k)
+
+    def task_4(self):
+        for num in range(self.start, self.end + 1):
+            base = choice(TABLE_BASES)
+            num_2 = from_decimal(num, 2)
+            num_n = from_decimal(num, base)
+            self.file_writer(num_2, 2, base, num_n)
+
+    def task_5(self):
+        for num in range(self.start, self.end + 1):
+            base = choice(TABLE_BASES)
+            num_2 = from_decimal(num, 2)
+            num_n = from_decimal(num, base)
+            self.file_writer(num_n, base, 2, num_2)
+
+    def task_6(self):
+        for num in range(self.start, self.end + 1):
+            from_base = choice(TABLE_BASES)
+            to_base = choice(TABLE_BASES)
+            if from_base == to_base:
+                continue
+            num_k = from_decimal(num, to_base)
+            num_n = from_decimal(num, from_base)
+            self.file_writer(num_n, from_base, to_base, num_k)
+
+    def task_7(self):
+        pass
+
+    def task_8(self):
+        pass
+
+    def task_9(self):
+        pass
 
 
 if __name__ == '__main__':
