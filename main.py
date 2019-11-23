@@ -1,11 +1,10 @@
 import sys
 import os
-from random import randint, choice
+from random import choice
 
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel,\
     QComboBox, QLineEdit, QPushButton, QTextEdit
 from PyQt5.Qt import QFont
-
 
 HEXADECIMAL_NUMBERS = '0123456789ABCDEF'
 TASK_TYPES = ('1.) ?n -> ?10', '2.) ?10 -> ?n', '3.) ?n -> ?k',
@@ -13,7 +12,7 @@ TASK_TYPES = ('1.) ?n -> ?10', '2.) ?10 -> ?n', '3.) ?n -> ?k',
               '6.) ?n -> ?k (по табл.)', '7.) ?n + ?n', '8.) ?n - ?n',
               '9.) ?n * ?n')
 BASES = (2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16)
-TABLE_BASES = (4, 8, 16)
+TABLE_BASES = (2, 4, 8, 16)
 
 
 def to_decimal(num, base):  # функция для перевода числа в десятичную СС
@@ -53,7 +52,7 @@ class InterfaceWidget(QWidget):
         self.setWindowTitle('Примеры по информатике')
 
         grid = QGridLayout()
-        grid.setHorizontalSpacing(50)
+        grid.setHorizontalSpacing(30)
         grid.setContentsMargins(50, 10, 50, 10)
         self.setLayout(grid)
 
@@ -84,7 +83,7 @@ class InterfaceWidget(QWidget):
         self.range_end_input.setMaximumHeight(35)
         grid.addWidget(self.range_end_input, 2, 1)
 
-        self.filename_label = QLabel('Название файла:', self)
+        self.filename_label = QLabel('Название файла (без расширения):', self)
         self.filename_label.setFont(QFont('Arial', 14))
         grid.addWidget(self.filename_label, 3, 0)
 
@@ -117,17 +116,24 @@ class InterfaceWidget(QWidget):
         if self.range[0] >= self.range[1]:
             self.output_console.append('Ошибка: минимальное число диапазона больше или равно максимальному.')
             return
+        if self.range[0] <= 0 or self.range[1] <= 0:
+            self.output_console.append('Ошибка: одно или более из заданных чисел меньше или равно нулю.')
+            return
 
         self.filename = self.filename_input.text()
         if self.filename == '':
             self.output_console.append('Ошибка: имя файла не задано.')
             return
-        if os.path.exists(self.filename):
+        if os.path.exists(self.filename + '.txt'):
             self.output_console.append('Ошибка: файл с таким именем уже существует.')
             return
 
         generator = NumeralSystems(self.task_type, self.range, self.filename)
-        generator.variables()
+        try:
+            if generator.variables():
+                self.output_console.append('Файл "{}" успешно создан.'.format(self.filename + '.txt'))
+        except Exception as ex:
+            self.output_console.append('Ошибка: {}.'.format(ex))
 
 
 class NumeralSystems:
@@ -158,12 +164,11 @@ class NumeralSystems:
         elif self.task == 9:
             self.task_9()
         return True
-        # self.file_writer()
 
     def file_writer(self, num, base1, base2, answer):
-        with open(self.file+'.txt', 'a', encoding='utf-8') as f:
-            f.write(':: Вопрос \n:: \\( %s_\{%s\} = ?_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число (без указания основания).'
-                    '\n\n' % (num, base1, base2, answer))
+        with open(self.file + '.txt', 'a', encoding='utf-8') as f:
+            f.write(':: Вопрос\n:: \\( %s_\{%s\} = ?_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
+                    '(без указания основания системы счисления).\n\n' % (num, base1, base2, answer))
 
     def task_1(self):
         for num in range(self.start, self.end + 1):
@@ -174,29 +179,30 @@ class NumeralSystems:
     def task_2(self):
         for num in range(self.start, self.end + 1):
             base = choice(BASES)
-            num_n = to_decimal(num, base)
-            self.file_writer(num_n, 10, base, num)
+            num_n = from_decimal(num, base)
+            self.file_writer(num, 10, base, num_n)
 
     def task_3(self):
         for num in range(self.start, self.end + 1):
             from_base = choice(BASES)
             to_base = choice(BASES)
-            if from_base == to_base:
-                continue
+            while from_base == to_base:
+                from_base = choice(BASES)
+                to_base = choice(BASES)
             num_k = from_decimal(num, to_base)
             num_n = from_decimal(num, from_base)
             self.file_writer(num_n, from_base, to_base, num_k)
 
     def task_4(self):
         for num in range(self.start, self.end + 1):
-            base = choice(TABLE_BASES)
+            base = choice(TABLE_BASES[1:])
             num_2 = from_decimal(num, 2)
             num_n = from_decimal(num, base)
             self.file_writer(num_2, 2, base, num_n)
 
     def task_5(self):
         for num in range(self.start, self.end + 1):
-            base = choice(TABLE_BASES)
+            base = choice(TABLE_BASES[1:])
             num_2 = from_decimal(num, 2)
             num_n = from_decimal(num, base)
             self.file_writer(num_n, base, 2, num_2)
@@ -205,8 +211,9 @@ class NumeralSystems:
         for num in range(self.start, self.end + 1):
             from_base = choice(TABLE_BASES)
             to_base = choice(TABLE_BASES)
-            if from_base == to_base:
-                continue
+            while from_base == to_base:
+                from_base = choice(TABLE_BASES)
+                to_base = choice(TABLE_BASES)
             num_k = from_decimal(num, to_base)
             num_n = from_decimal(num, from_base)
             self.file_writer(num_n, from_base, to_base, num_k)
