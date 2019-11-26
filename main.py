@@ -168,7 +168,23 @@ class NumeralSystems:
     def file_writer(self, num, base1, base2, answer):
         with open(self.file + '.txt', 'a', encoding='utf-8') as f:
             f.write(':: Вопрос\n:: \\( %s_\{%s\} = ?_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
-                    '(без указания основания системы счисления).\n\n' % (num, base1, base2, answer))
+                    '(без указания основания системы счисления).\n\n' % (num, base1, base2, answer)
+                    
+    def file_writer2(self, num1, num2, base, answer):
+        if self.task == 7:
+            with open(self.file + '.txt', 'a', encoding='utf-8') as f:
+                f.write(':: Вопрос\n:: \\( %s_\{%s\} + %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
+                        '(без указания основания системы счисления).\n\n' % (num1, base, num2, base, answer))
+                    
+        elif self.task == 8:
+            with open(self.file + '.txt', 'a', encoding='utf-8') as f:
+                f.write(':: Вопрос\n:: \\( %s_\{%s\} - %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
+                        '(без указания основания системы счисления).\n\n' % (num1, base, num2, base, answer))
+                    
+        else:
+            with open(self.file + '.txt', 'a', encoding='utf-8') as f:
+                f.write(':: Вопрос\n:: \\( %s_\{%s\} * %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
+                        '(без указания основания системы счисления).\n\n' % (num1, base, num2, base, answer))
 
     def task_1(self):
         for num in range(self.start, self.end + 1):
