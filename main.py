@@ -130,7 +130,7 @@ class InterfaceWidget(QWidget):
 
         generator = NumeralSystems(self.task_type, self.range, self.filename)
         try:
-            if generator.variables():
+            if generator.result_call():
                 self.output_console.append('Файл "{}" успешно создан.'.format(self.filename + '.txt'))
         except Exception as ex:
             self.output_console.append('Ошибка: {}.'.format(ex))
@@ -144,7 +144,7 @@ class NumeralSystems:
         self.end = ranges[1]
         self.file = file
 
-    def variables(self):
+    def result_call(self):
         if self.task == 1:
             self.task_1()
         elif self.task == 2:
@@ -181,7 +181,7 @@ class NumeralSystems:
                 f.write(':: Вопрос\n:: \\( %s_\{%s\} - %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
                         '(без указания основания системы счисления).\n\n' % (num1, base, num2, base, answer))
                     
-        else:
+        elif self.task == 9:
             with open(self.file + '.txt', 'a', encoding='utf-8') as f:
                 f.write(':: Вопрос\n:: \\( %s_\{%s\} * %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
                         '(без указания основания системы счисления).\n\n' % (num1, base, num2, base, answer))
