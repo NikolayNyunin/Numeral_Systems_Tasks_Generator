@@ -168,23 +168,12 @@ class NumeralSystems:
     def file_writer(self, num, base1, base2, answer):
         with open(self.file + '.txt', 'a', encoding='utf-8') as f:
             f.write(':: Вопрос\n:: \\( %s_\{%s\} = ?_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
-                    '(без указания основания системы счисления).\n\n' % (num, base1, base2, answer)
-                    
-    def file_writer2(self, num1, num2, base, answer):
-        if self.task == 7:
-            with open(self.file + '.txt', 'a', encoding='utf-8') as f:
-                f.write(':: Вопрос\n:: \\( %s_\{%s\} + %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
-                        '(без указания основания системы счисления).\n\n' % (num1, base, num2, base, answer))
-                    
-        elif self.task == 8:
-            with open(self.file + '.txt', 'a', encoding='utf-8') as f:
-                f.write(':: Вопрос\n:: \\( %s_\{%s\} - %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
-                        '(без указания основания системы счисления).\n\n' % (num1, base, num2, base, answer))
-                    
-        elif self.task == 9:
-            with open(self.file + '.txt', 'a', encoding='utf-8') as f:
-                f.write(':: Вопрос\n:: \\( %s_\{%s\} * %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
-                        '(без указания основания системы счисления).\n\n' % (num1, base, num2, base, answer))
+                    '(без указания основания системы счисления).\n\n' % (num, base1, base2, answer))
+
+    def file_writer2(self, operation, num1, num2, base, answer):
+        with open(self.file + '.txt', 'a', encoding='utf-8') as f:
+            f.write(':: Вопрос\n:: \\( %s_\{%s\} %s %s_\{%s\} \\)\t{=%s}\n:: В ответе укажите только число '
+                    '(без указания основания системы счисления).\n\n' % (num1, base, operation, num2, base, answer))
 
     def task_1(self):
         for num in range(self.start, self.end + 1):
@@ -235,13 +224,34 @@ class NumeralSystems:
             self.file_writer(num_n, from_base, to_base, num_k)
 
     def task_7(self):
-        pass
+        for num1 in range(self.start, self.end + 1):
+            base = choice(BASES)
+            num1_n = from_decimal(num1, base)
+            num2 = choice(range(self.start, self.end + 1))
+            num2_n = from_decimal(num2, base)
+            res = num1 + num2
+            res_n = from_decimal(res, base)
+            self.file_writer2('+', num1_n, num2_n, base, res_n)
 
     def task_8(self):
-        pass
+        for num1 in range(self.start, self.end + 1):
+            base = choice(BASES)
+            num1_n = from_decimal(num1, base)
+            num2 = choice(range(self.start // 2, num1))
+            num2_n = from_decimal(num2, base)
+            res = num1 - num2
+            res_n = from_decimal(res, base)
+            self.file_writer2('-', num1_n, num2_n, base, res_n)
 
     def task_9(self):
-        pass
+        for num1 in range(self.start, self.end + 1):
+            base = choice(BASES)
+            num1_n = from_decimal(num1, base)
+            num2 = choice(range(self.start, self.end + 1))
+            num2_n = from_decimal(num2, base)
+            res = num1 * num2
+            res_n = from_decimal(res, base)
+            self.file_writer2('*', num1_n, num2_n, base, res_n)
 
 
 if __name__ == '__main__':
