@@ -26,13 +26,12 @@ def to_decimal(num, base):  # функция для перевода числа 
 
 
 def from_decimal(num, base):  # функция для перевода числа из десятичной СС
-    res = []
+    res = ''
     while num != 0:
-        res.append(num % base)
+        res += HEXADECIMAL_NUMBERS[num % base]
         num //= base
 
-    res = list(map(lambda d: HEXADECIMAL_NUMBERS[d], res))[::-1]
-    return ''.join(res)
+    return res[::-1]
 
 
 class InterfaceWidget(QWidget):
